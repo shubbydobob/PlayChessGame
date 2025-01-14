@@ -1,0 +1,52 @@
+/* 기본 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center;    /* 세로 중앙 정렬 */
+    height: 100vh;          /* 화면 전체 높이를 사용 */
+    background-color: #f0f0f0;
+}
+
+#gameContainer {
+    display: flex;
+    flex-direction: column; /* 요소들을 세로로 배치 */
+    align-items: center;    /* 가로 중앙 정렬 */
+    gap: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#chessBoard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content; /* 캔버스 크기에 맞게 자동 조정 */
+    border: 2px solid #000;
+}
+
+#gameInfo {
+    text-align: center;
+    width: 100%;
+}
+
+#chatInput {
+    margin-top: 10px;
+    width: 80%;
+    padding: 8px;
+    font-size: 14px;
+}
+
+#chatMessages {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+}
