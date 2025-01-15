@@ -52,9 +52,9 @@ function drawPieces() {
             if (piece !== '') {
                 textSize(32);
                 if (piece === piece.toLowerCase()){
-                    fill('blue'); // 플레이어 1 (파랑)
+                    fill('blue'); // 플레이어 2 (파랑)
                 } else {
-                    fill('red'); // 플레이어 2 (빨강)
+                    fill('red'); // 플레이어 1 (빨강)
                 }
                 text(piece, col * tileSize + tileSize / 4, row * tileSize + tileSize / 1.5); // 체스말 그리기
             }
@@ -95,14 +95,21 @@ function mousePressed() {
 
 // 유효한 이동인지 확인하는 함수
 function isValidMove(fromRow, fromCol, toRow, toCol) {
-    const piece = board[fromRow][fromCol];
+    const piece = board[fromRow][fromCol]; // 선택된 기물
     console.log(`isValidMove 호출: ${piece} (${fromRow}, ${fromCol}) -> (${toRow}, ${toCol})`);
 
     if (piece === ''){
         console.error("유효하지 않은 이동: 선택한 칸이 비어있습니다.");
         return false;
     }
+    // 플레이어1(흰색) 대문자, 플레이어2(검은색) 소문자 확인
+    if ((currentTurn === 'white' && piece !== piece.toUpperCase()) ||
+        (currentTurn === 'black' && piece !== piece.toLowerCase())) {
+        console.error("현재 턴에 맞지 않는 기물을 선택했습니다.");
+        return false;
+    }
 
+    // 기물 종류를 소문자로 변환하여 이동 규칙 처리
     switch (piece.toLowerCase()) {
         case 'king':
             console.log("킹 이동 검사");
@@ -128,6 +135,26 @@ function isValidMove(fromRow, fromCol, toRow, toCol) {
     }
 }
 
+// 장애물 확인 함수
+function checkPathClear(fromRow, fromCol, toRow, toCol) {
+    const rowStep = Math.sign(toRow - fromRow); // 행 이동 방향
+    const colStep = Math.sign(toCol - fromCol); // 열 이동 방향
+
+    let currentRow = fromRow + rowStep;
+    let currentCol = fromCol + colStep;
+
+    while (currentRow !== toRow || currentCol !== toCol) {
+        if (board[currentRow][currentCol] !== '') {
+            console.log("장애물 발견: ", currentRow, currentCol);
+            return false;
+        }
+        currentRow += rowStep;
+        currentCol += colStep;
+    }
+
+    return true; // 경로가 비어 있음
+}
+
 // 각 기물 종류별 이동 로직 구현
 function isKingMove(fromRow, fromCol, toRow, toCol) {
     // 킹은 1칸 이동, 가로, 세로, 대각선으로 이동 가능
@@ -138,19 +165,26 @@ function isKingMove(fromRow, fromCol, toRow, toCol) {
 function isQueenMove(fromRow, fromCol, toRow, toCol) {
     // 퀸은 가로, 세로, 대각선으로 여러 칸 이동
     console.log("퀸 이동: ", fromRow, fromCol, "에서", toRow, toCol, "으로 이동");
-    return isRookMove(fromRow, fromCol, toRow, toCol) || isBishopMove(fromRow, fromCol, toRow, toCol);
+    return checkPathClear(fromRow, fromCol, toRow, toCol) &&
+           (isRookMove(fromRow, fromCol, toRow, toCol) || isBishopMove(fromRow, fromCol, toRow, toCol));
 }
 
 function isRookMove(fromRow, fromCol, toRow, toCol) {
-    // 룩은 가로, 세로로만 이동
     console.log("룩 이동: ", fromRow, fromCol, "에서", toRow, toCol, "으로 이동");
-    return fromRow === toRow || fromCol === toCol;
+    if (fromRow !== toRow && fromCol !== toCol) {
+        console.log("룩은 가로 또는 세로로만 이동할 수 있습니다.");
+        return false; // 가로 또는 세로가 아닌 경우 이동 불가
+    }
+    return checkPathClear(fromRow, fromCol, toRow, toCol); // 장애물 검사
 }
 
 function isBishopMove(fromRow, fromCol, toRow, toCol) {
-    // 비숍은 대각선으로만 이동
     console.log("비숍 이동: ", fromRow, fromCol, "에서", toRow, toCol, "으로 이동");
-    return Math.abs(fromRow - toRow) === Math.abs(fromCol - toCol);
+    if (Math.abs(fromRow - toRow) !== Math.abs(fromCol - toCol)) {
+        console.log("비숍은 대각선으로만 이동할 수 있습니다.");
+        return false; // 대각선이 아닌 경우 이동 불가
+    }
+    return checkPathClear(fromRow, fromCol, toRow, toCol); // 장애물 검사
 }
 
 function isKnightMove(fromRow, fromCol, toRow, toCol) {
