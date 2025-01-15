@@ -13,9 +13,26 @@ public class ChessGameController {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
 
+    @GetMapping ("/")
+    private String playChess(){
+        logger.info("전 세계 체스 플레이어와 플레이하세요 !");
+        return "/PlayChessGame";
+    }
+
+    @GetMapping ("/Login")
+    private String LoginPage(){
+        logger.info("로그인 해주세요 !");
+        return "/Login/Login";
+    }
+    @GetMapping ("/Register")
+    private String RegisterPage(){
+        logger.info("회원가입 해주세요 !");
+        return "/Login/Register";
+    }
+
     @GetMapping ("/Room")
     private String RoomPage(){
-
+        logger.info("방을 생성하여 체스 플레이를 해보세요!");
         return "/Room";
     }
 
