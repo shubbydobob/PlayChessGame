@@ -6,7 +6,7 @@ let currentTurn = 'white'; // 현재 턴 (white: 플레이어1, black: 플레이
 const tileSize = 100; // 각 타일 크기
 const boardSize = 8; // 체스 보드의 행/열 크기
 
-// 체스 말들의 초기 배치 설정 (각각의 기물을 나타내는 문자열로 정의, 대문자: 흰색, 소문자: 검은색)
+// 체스 기물들의 초기 배치 설정 (각각의 기물을 나타내는 문자열로 정의, 대문자: 흰색, 소문자: 검은색)
 const initialBoard = [
       ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'], // 흰색 첫 번째 줄
       ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], // 흰색 폰
@@ -111,19 +111,19 @@ function isValidMove(fromRow, fromCol, toRow, toCol) {
 
     // 기물 종류를 소문자로 변환하여 이동 규칙 처리
     switch (piece.toLowerCase()) {
-        case 'king':
+        case 'k':
             console.log("킹 이동 검사");
             return isKingMove(fromRow, fromCol, toRow, toCol);
-        case 'queen':
+        case 'q':
             console.log("퀸 이동 검사");
             return isQueenMove(fromRow, fromCol, toRow, toCol);
-        case 'rook':
+        case 'r':
             console.log("룩 이동 검사");
             return isRookMove(fromRow, fromCol, toRow, toCol);
-        case 'bishop':
+        case 'b':
             console.log("비숍 이동 검사");
             return isBishopMove(fromRow, fromCol, toRow, toCol);
-        case 'knight': // 나이트는 장애물 검사 없이 이동 가능
+        case 'n': // 나이트는 장애물 검사 없이 이동 가능
             console.log("나이트 이동 검사");
             return isKnightMove(fromRow, fromCol, toRow, toCol);
         case 'p':
