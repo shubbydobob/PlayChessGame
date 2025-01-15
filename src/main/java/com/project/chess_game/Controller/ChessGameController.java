@@ -13,8 +13,9 @@ public class ChessGameController {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
 
-    @GetMapping ("Room")
+    @GetMapping ("/Room")
     private String RoomPage(){
+
         return "/Room";
     }
 
