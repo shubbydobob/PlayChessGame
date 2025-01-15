@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Play Chess With All of the world!</title>
+    <title>Play Chess With All of the World!</title>
+    <link rel="stylesheet" href="/css/Common.css">
+    <link rel="stylesheet" href="/css/PlayChessGame.css">
 </head>
 <body>
-<a href="/Login">로그인</a>
-<a href="/Register">계정 생성</a>
-<a href="/Room">방 만들기</a>
+<!-- 로그인 상태에 따른 조건 -->
+<div id="header">
+    <div th:if="${loggedInUser != null}">
+        <p th:text="${loggedInUser} + '님 환영합니다!'"></p>
+        <a th:href="@{/Logout}">로그아웃</a>
+    </div>
+    <div th:if="${loggedInUser == null}">
+        <a th:href="@{/Login}">로그인</a>
+        <a th:href="@{/Register}">계정 생성</a>
+    </div>
+</div>
+
+<a th:href="@{/Room}">방 만들기</a>
 </body>
 </html>
