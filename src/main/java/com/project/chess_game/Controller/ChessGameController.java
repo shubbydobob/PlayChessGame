@@ -12,6 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Controller
 public class ChessGameController {
 
@@ -29,7 +33,7 @@ public class ChessGameController {
         logger.info("전 세계 체스 플레이어와 플레이하세요 !");
         String loggedInUser = (String) session.getAttribute("loggedInUser");
         model.addAttribute("loggedInUser", loggedInUser); // 세션에 저장된 사용자 전달
-        return "/PlayChessGame";
+        return "PlayChessGame";
     }
 
     @GetMapping("/Login")
