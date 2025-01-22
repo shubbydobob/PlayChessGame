@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Play Chess With All of the World!</title>
     <link rel="stylesheet" href="/css/PlayChessGame.css">
+    <!-- Thymeleaf 변수 JavaScript로 전달 -->
+    <script th:inline="javascript">
+        const isLoggedIn = [[${loggedInUser != null}]];
+    </script>
     <script src="/js/PlayChessGame.js"></script>
 </head>
 <body>
