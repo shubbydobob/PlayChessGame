@@ -30,15 +30,12 @@ public class ChessGameController {
         return "PlayChessGame";
     }
 
-    @GetMapping("/Login")
-    private String LoginPage() {
-        logger.info("로그인 페이지 요청: 로그인 해주세요!");
-        return "/";
-    }
-
     // 로그인 요청 처리
     @PostMapping("/Login")
-    public String loginUser(@RequestParam String userId, @RequestParam String password, HttpSession session, Model model) {
+    public String loginUser(@RequestParam String userId,
+                            @RequestParam String password,
+                            HttpSession session,
+                            Model model) {
         logger.info("로그인 요청: userId = {}", userId);
 
         User user = new User();
@@ -83,6 +80,7 @@ public class ChessGameController {
         }
     }
 
+    // 로그아웃
     @GetMapping("/Logout")
     public String logout(HttpSession session) {
         String userId = (String) session.getAttribute("loggedInUser");
@@ -93,12 +91,21 @@ public class ChessGameController {
         return "redirect:/"; // 로그인 페이지로 리다이렉트
     }
 
+    // 방 만들기 페이지 (로그인을 해야 이동 가능)
     @GetMapping("/Room")
-    private String RoomPage() {
-        logger.info("방을 생성하여 체스 플레이를 해보세요!");
-        return "/Room";
+    private String RoomPage(HttpSession session, Model model) {
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            logger.warn("비로그인 사용자의 방 생성 시도");
+            model.addAttribute("notloggenIn", true);
+            return "PlayChessGame";
+        }
+        logger.info("방을 생성하여 체스 플레이를 해보세요! userId = {}", loggedInUser);
+        return "Room";
     }
 
+    // 생성된 방에서 플레이어와 게임 플레이
     @GetMapping("/ChessGame")
     public String chessGame(@RequestParam(required = false) Long roomId, Model model) {
         if (roomId == null) {

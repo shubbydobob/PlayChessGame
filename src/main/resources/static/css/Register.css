@@ -1,0 +1,93 @@
+/* 🟢 공통 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* 🟢 배경 설정 */
+body {
+    background: url('/images/chess-home2.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+/* 🟢 헤더 스타일 */
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFD700; /* 골드 색상 */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* 🟢 계정 생성 컨테이너 */
+.register-container {
+    background: rgba(0, 0, 0, 0.75);
+    padding: 25px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+/* 🟢 폼 스타일 */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.register-form label {
+    font-size: 14px;
+    color: #ddd;
+    text-align: left;
+    display: block;
+    font-weight: bold;
+}
+
+.register-form input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* 🟢 버튼 스타일 */
+.btn {
+    display: inline-block;
+    background: #FFD700; /* 골드 */
+    color: black;
+    padding: 12px 18px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 🟢 중앙 컨테이너 */
+.center-container {
+    margin-top: 10px;
+}
