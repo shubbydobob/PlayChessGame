@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>Play Chess With All of the world! - 계정 생성하기</title>
     <link rel="stylesheet" href="/css/Register.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+           const urlParams = new URLSearchParams(window.location.search);
+           if(urlParams.has("success")){
+              alert("축하합니다! 계정이 생성되었습니다.");
+           }
+        });
+    </script>
 </head>
 <body>
 <div class="register-container">

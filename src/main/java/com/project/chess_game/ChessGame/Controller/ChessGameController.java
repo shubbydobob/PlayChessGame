@@ -72,7 +72,7 @@ public class ChessGameController {
         boolean isCreated = userService.registerUser(user);
         if (isCreated) {
             logger.info("계정 생성 성공: userId = {}", userId);
-            return "redirect:/";
+            return "redirect:/Register?success=true";
         } else {
             logger.warn("계정 생성 실패: userId = {}", userId);
             model.addAttribute("error", "이미 존재하는 사용자 ID입니다.");
