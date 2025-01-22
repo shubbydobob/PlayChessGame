@@ -8,7 +8,7 @@
 
 /* 🟢 배경 설정 */
 body {
-    background: url('/images/chess-home2.jpg') no-repeat center center/cover;
+    background: url('/images/chess-home.jpg') no-repeat center center/cover;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -78,33 +78,24 @@ body {
 
 /* 🟢 버튼 스타일 */
 .btn {
-    display: inline-block;
-    background: #FFD700; /* 골드 */
-    color: black;
-    padding: 12px 18px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
-    border: none;
-    cursor: pointer;
+   display: inline-block;
+       background: #FFD700; /* 골드 */
+       color: black;
+       padding: 12px 18px;
+       border-radius: 5px;
+       font-size: 16px;
+       font-weight: bold;
+       text-decoration: none;
+       transition: 0.3s;
+       border: none;
+       cursor: pointer;
+       width: 100%; /* 🔹 버튼 크기를 동일하게 설정 */
+       text-align: center;
 }
 
 .btn:hover {
     background: rgba(255, 255, 255, 0.3);
     color: white;
-}
-
-/* 보조 버튼 (계정 생성 버튼) */
-.btn.secondary {
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-.btn.secondary:hover {
-    background: rgba(255, 215, 0, 0.8);
-    color: black;
 }
 
 /* 🟢 중앙 컨테이너 */

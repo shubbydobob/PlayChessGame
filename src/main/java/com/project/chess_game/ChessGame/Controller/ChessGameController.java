@@ -98,7 +98,7 @@ public class ChessGameController {
 
         if (loggedInUser == null) {
             logger.warn("비로그인 사용자의 방 생성 시도");
-            model.addAttribute("notloggenIn", true);
+            model.addAttribute("notLoggedIn", true);
             return "PlayChessGame";
         }
         logger.info("방을 생성하여 체스 플레이를 해보세요! userId = {}", loggedInUser);

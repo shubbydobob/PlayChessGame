@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Play Chess With All of the World!</title>
     <link rel="stylesheet" href="/css/PlayChessGame.css">
+    <script src="/js/PlayChessGame.js"></script>
 </head>
 <body>
 <!-- 헤더 -->
@@ -15,7 +16,7 @@
 <section id="user-section">
     <div th:if="${loggedInUser != null}" class="user-info">
         <p th:text="${loggedInUser} + '님 환영합니다!'"></p>
-        <a th:href="@{/Logout}">로그아웃</a>
+        <a th:href="@{/Logout}" class="btn">로그아웃</a>
     </div>
     <div th:if="${loggedInUser == null}" class="auth-container">
         <form action="/Login" method="post" class="login-form">
@@ -32,7 +33,7 @@
 </section>
 <!-- 중앙 버튼 -->
 <div class="center-container">
-    <a th:href="@{/Room}" class="btn">방 만들기</a>
+    <a th:href="@{/Room}" class="btn" id="createRoomBtn">방 만들기</a>
 </div>
 </body>
 </html>
