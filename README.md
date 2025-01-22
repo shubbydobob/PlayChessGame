@@ -31,9 +31,13 @@
 
 ---
 
-## 4. 사용하는 방법 (How to)
+<!-- ## 4. 사용하는 방법 (How to)
 ### 설치 및 실행
 1. **프로젝트 클론**
    ```bash
    git clone https://github.com/your-repo/chess-game.git
    cd chess-game
+-->
+
+<img src="https://github.com/user-attachments/assets/866d1c91-edbc-41a5-9754-bfc80c38b05b" alt="chess-page"
+  width="500" height="400">
