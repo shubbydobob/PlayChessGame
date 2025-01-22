@@ -1,7 +1,6 @@
-package com.project.chess_game.Config;
+package com.project.chess_game.ChessGame.Config;
 
-import com.project.chess_game.Handler.WebSocketHandler;
-import jakarta.websocket.server.ServerEndpoint;
+import com.project.chess_game.ChessGame.Handler.WebSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

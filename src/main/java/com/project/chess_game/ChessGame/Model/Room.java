@@ -1,4 +1,4 @@
-package com.project.chess_game.Model;
+package com.project.chess_game.ChessGame.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

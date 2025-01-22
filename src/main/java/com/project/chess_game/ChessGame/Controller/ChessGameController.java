@@ -1,20 +1,14 @@
-package com.project.chess_game.Controller;
+package com.project.chess_game.ChessGame.Controller;
 
-import com.project.chess_game.Handler.WebSocketHandler;
-import com.project.chess_game.Model.User;
-import com.project.chess_game.Service.UserService;
+import com.project.chess_game.ChessGame.Model.User;
+import com.project.chess_game.ChessGame.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Controller
 public class ChessGameController {
@@ -39,7 +33,7 @@ public class ChessGameController {
     @GetMapping("/Login")
     private String LoginPage() {
         logger.info("로그인 페이지 요청: 로그인 해주세요!");
-        return "/Login/Login";
+        return "/";
     }
 
     // 로그인 요청 처리
@@ -59,7 +53,7 @@ public class ChessGameController {
         } else {
             logger.warn("로그인 실패: userId = {}", userId);
             model.addAttribute("error", "잘못된 ID 또는 비밀번호입니다.");
-            return "/Login/Login"; // 로그인 페이지로 다시 이동
+            return "/"; // 로그인 페이지로 다시 이동
         }
     }
 
@@ -81,7 +75,7 @@ public class ChessGameController {
         boolean isCreated = userService.registerUser(user);
         if (isCreated) {
             logger.info("계정 생성 성공: userId = {}", userId);
-            return "redirect:/Login"; // 로그인 페이지로 리다이렉트
+            return "redirect:/";
         } else {
             logger.warn("계정 생성 실패: userId = {}", userId);
             model.addAttribute("error", "이미 존재하는 사용자 ID입니다.");
@@ -96,7 +90,7 @@ public class ChessGameController {
 
         session.invalidate(); // 세션 무효화
         logger.info("로그아웃 성공: userId = {}", userId);
-        return "redirect:/Login"; // 로그인 페이지로 리다이렉트
+        return "redirect:/"; // 로그인 페이지로 리다이렉트
     }
 
     @GetMapping("/Room")

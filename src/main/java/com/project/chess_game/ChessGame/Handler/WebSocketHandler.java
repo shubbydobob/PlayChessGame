@@ -1,8 +1,8 @@
-package com.project.chess_game.Handler;
+package com.project.chess_game.ChessGame.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.chess_game.Model.Room;
-import com.project.chess_game.Repository.RoomRepository;
+import com.project.chess_game.ChessGame.Model.Room;
+import com.project.chess_game.ChessGame.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;

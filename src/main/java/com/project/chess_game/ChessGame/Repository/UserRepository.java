@@ -1,6 +1,6 @@
-package com.project.chess_game.Repository;
+package com.project.chess_game.ChessGame.Repository;
 
-import com.project.chess_game.Model.User;
+import com.project.chess_game.ChessGame.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

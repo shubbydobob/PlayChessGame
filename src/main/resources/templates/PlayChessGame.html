@@ -7,18 +7,33 @@
     <link rel="stylesheet" href="/css/PlayChessGame.css">
 </head>
 <body>
+<!-- 헤더 -->
+<header class="header">
+    <h1>♔ King’s Gambit: 최고의 전략을 펼쳐라!</h1>
+</header>
+
 <!-- 로그인 상태에 따른 조건 -->
-<div id="header">
-    <div th:if="${loggedInUser != null}">
+<section id="user-section">
+    <div th:if="${loggedInUser != null}" class="user-info">
         <p th:text="${loggedInUser} + '님 환영합니다!'"></p>
         <a th:href="@{/Logout}">로그아웃</a>
     </div>
-    <div th:if="${loggedInUser == null}">
-        <a th:href="@{/Login}">로그인</a>
-        <a th:href="@{/Register}">계정 생성</a>
-    </div>
-</div>
+    <div th:if="${loggedInUser == null}" class="auth-container">
+        <form action="/Login" method="post" class="login-form">
+            <label for="userId">유저 ID:</label>
+            <input type="text" id="userId" name="userId" required>
 
-<a th:href="@{/Room}">방 만들기</a>
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="btn">로그인</button>
+        </form>
+        <a th:href="@{/Register}" class="btn">계정 생성</a>
+    </div>
+</section>
+<!-- 중앙 버튼 -->
+<div class="center-container">
+    <a th:href="@{/Room}" class="btn">방 만들기</a>
+</div>
 </body>
 </html>

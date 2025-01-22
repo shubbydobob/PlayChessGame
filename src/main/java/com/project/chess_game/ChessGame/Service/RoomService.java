@@ -1,7 +1,7 @@
-package com.project.chess_game.Service;
+package com.project.chess_game.ChessGame.Service;
 
-import com.project.chess_game.Model.Room;
-import com.project.chess_game.Repository.RoomRepository;
+import com.project.chess_game.ChessGame.Model.Room;
+import com.project.chess_game.ChessGame.Repository.RoomRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
