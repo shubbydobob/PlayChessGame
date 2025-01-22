@@ -1,7 +1,7 @@
-package com.project.chess_game.Service;
+package com.project.chess_game.ChessGame.Service;
 
-import com.project.chess_game.Model.User;
-import com.project.chess_game.Repository.UserRepository;
+import com.project.chess_game.ChessGame.Model.User;
+import com.project.chess_game.ChessGame.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

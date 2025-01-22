@@ -1,8 +1,8 @@
-package com.project.chess_game.Handler;
+package com.project.chess_game.ChessGame.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.chess_game.Model.Room;
-import com.project.chess_game.Repository.RoomRepository;
+import com.project.chess_game.ChessGame.Model.Room;
+import com.project.chess_game.ChessGame.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
@@ -56,20 +56,32 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private void sendRoomListToClient(WebSocketSession session) throws Exception {
         Iterable<Room> rooms = roomRepository.findAll(); // 모든 방 목록 조회
         List<Map<String, Object>> roomList = new ArrayList<>();
+
         for (Room room : rooms) {
             Map<String, Object> roomData = new HashMap<>();
             roomData.put("roomId", room.getId());  // roomId 포함
             roomData.put("roomName", room.getRoomName()); // roomName 포함
+            roomData.put("currentPlayers", getPlayerCount(room));
+            roomData.put("maxPlayers", 2);
+
             roomList.add(roomData);  // 리스트에 추가
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("event", "roomListUpdate"); // 방 목록 업데이트 이벤트
-        response.put("rooms", rooms); // 방 목록 정보
+        response.put("rooms", roomList); // 방 목록 정보
+
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response))); // 클라이언트에게 방 목록 전송
-        logger.info("방 목록 전송: 방 개수 {}", ((Collection<?>) rooms).size());
+        logger.info("방 목록 전송: 방 개수 {}", roomList.size());
     }
 
+    // 현재 방에 입장한 플레이어 수 가져오기
+    private int getPlayerCount(Room room) {
+        int count = 0;
+        if (room.getPlayer1() != null) count++;
+        if (room.getPlayer2() != null) count++;
+        return count;
+    }
 
     // 플레이어 입장 이벤트를 클라이언트에 전송
     private void sendJoinRoomEvent(WebSocketSession session, Long roomId, String roomName, String playerName) throws Exception {
@@ -134,13 +146,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
                             logger.info("플레이어가 방에 입장함. 방 ID: {}, 방 RoomName {}, 플레이어2: {}", joinRoomId, joinRoomName, room.getPlayer2());
                             sendJoinRoomEvent(session, joinRoomId, room.getRoomName(), room.getPlayer2());
                         } else {
-                            logger.warn("입장 실패: 두 번째 플레이어는 이미 설정되어 있습니다. 방 ID: {}", joinRoomId);
+                            // 방이 가득 찼을 경우 'roomFull' 이벤트 전송
+                            logger.warn("입장 실패: 방이 가득 찼습니다. 방 ID: {}", joinRoomId);
+                            Map<String, Object> response = new HashMap<>();
+                            response.put("event", "roomFull");
+                            response.put("roomId", joinRoomId);
+                            response.put("roomName", room.getRoomName());
+                            response.put("currentPlayers", playerCount);
+                            response.put("maxPlayers", 2);
+                            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
                         }
-                    } else {
-                        logger.warn("입장 실패: 방이 가득 찼습니다. 방 ID: {}", joinRoomId);
+                        break;
                     }
-                    break;
-
                 case "chat":
                     String chatMessage = data.get("message"); // 채팅 메시지 추출
                     logger.info("채팅 메시지 수신: {}", chatMessage);
@@ -188,7 +205,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     // WebSocket 연결 종료 시 처리
     @Override
-    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws
+            Exception {
         super.afterConnectionClosed(session, status);
         String sessionId = session.getId();
         logger.info("WebSocket 연결 종료: 세션 ID = {}", sessionId); // 로그로 기록

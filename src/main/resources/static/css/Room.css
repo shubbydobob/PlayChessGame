@@ -1,138 +1,175 @@
-/* 기본 스타일 리셋 (브라우저 간 일관성 위해) */
-body, html {
+/* 🟢 공통 스타일 */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif; /* 폰트 설정 */
-    background-color: #2b2b2b; /* 어두운 배경 색상, 체스 테마 */
-    color: #f5f5f5; /* 밝은 텍스트 색상 */
+    font-family: "Arial", sans-serif;
 }
 
-/* 콘텐츠를 수직 및 수평 중앙 정렬 */
+/* 🟢 배경 설정 */
 body {
+    background: url('/images/chess-home.jpg') no-repeat center center/cover;
+    height: 100vh;
     display: flex;
-    justify-content: center; /* 수평 중앙 */
-    align-items: center; /* 수직 중앙 */
-    height: 100vh; /* 화면 높이에 맞춤 */
-    flex-direction: column; /* 세로 방향으로 정렬 */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
 }
 
-/* 페이지 제목 스타일 */
+/* 🟢 제목 스타일 */
 h1 {
-    color: #ffffff; /* 제목 색상 */
-    margin-bottom: 20px; /* 제목 아래 여백 */
-    font-size: 36px; /* 제목 크기 */
-    text-align: center; /* 제목 중앙 정렬 */
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* 제목 그림자 */
+    font-size: 36px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+    margin-bottom: 20px;
 }
 
-/* 버튼 스타일 */
-button {
-    background-color: #4CAF50; /* 버튼 배경색 (녹색 테마) */
-    color: white; /* 버튼 텍스트 색상 */
-    padding: 10px 20px; /* 버튼 내부 여백 */
-    margin: 10px; /* 버튼 간 여백 */
-    border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 둥근 모서리 */
-    cursor: pointer; /* 커서 모양을 손가락 모양으로 */
-    font-size: 16px; /* 텍스트 크기 */
-    transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
+/* 🟢 메인 컨테이너 */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 90%;
+    max-width: 600px;
 }
 
-/* 버튼에 마우스 올릴 때 스타일 */
-button:hover {
-    background-color: #45a049; /* 버튼 배경색 조금 어두운 색으로 변경 */
+/* 🟢 방 생성 버튼 */
+#openRoomButton {
+    background: #FFD700;
+    color: black;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    width: 100%;
 }
 
-/* 채팅 입력 필드 스타일 */
-#chatInput {
-    padding: 10px; /* 내부 여백 */
-    font-size: 16px; /* 텍스트 크기 */
-    width: 300px; /* 입력 필드 너비 */
-    margin: 10px; /* 입력 필드 주변 여백 */
-    border: 1px solid #ccc; /* 테두리 */
-    border-radius: 5px; /* 둥근 모서리 */
+#openRoomButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
 }
 
-/* 입력 필드에 포커스 시 효과 */
-#chatInput:focus {
-    outline: none; /* 기본 포커스 효과 제거 */
-    border: 1px solid #4CAF50; /* 포커스 시 테두리 색상 */
-    box-shadow: 0 0 5px #4CAF50; /* 포커스 시 그림자 효과 */
-}
-
-/* 채팅 메시지 컨테이너 스타일 */
-#chatMessages {
-    width: 80%; /* 컨테이너 너비 */
-    max-width: 500px; /* 최대 너비 제한 */
-    height: 200px; /* 높이 설정 */
-    margin: 20px auto; /* 위 아래 여백 및 중앙 정렬 */
-    padding: 10px; /* 내부 여백 */
-    overflow-y: auto; /* 세로 스크롤 가능 */
-    background-color: #1e1e1e; /* 어두운 배경색 */
-    border: 1px solid #4CAF50; /* 테두리 */
-    border-radius: 5px; /* 둥근 모서리 */
-    color: #ddd; /* 텍스트 색상 */
-    font-size: 14px; /* 텍스트 크기 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
-}
-
-/* 개별 채팅 메시지 스타일 */
-.chat-message {
-    margin-bottom: 10px; /* 메시지 간 여백 */
-    padding: 5px 10px; /* 메시지 내부 여백 */
-    border-bottom: 1px solid #333; /* 메시지 하단 테두리 */
-    word-wrap: break-word; /* 긴 단어가 화면 밖으로 넘어가지 않도록 처리 */
-}
-
-/* 시스템 메시지 스타일 (예: 방 생성) */
-.chat-message.system-message {
-    color: #ffa500; /* 시스템 메시지 색상 (주황색) */
-    font-style: italic; /* 기울임꼴 */
-}
-
-/* 사용자 메시지 스타일 */
-.chat-message.user-message {
-    color: #f5f5f5; /* 기본 사용자 메시지 색상 */
-}
-
-/* 강조된 메시지 스타일 (예: 알림) */
-.chat-message.highlighted-message {
-    background-color: #444; /* 강조된 메시지 배경 색상 */
-    border-radius: 3px; /* 둥근 모서리 */
-    padding: 5px; /* 메시지 내부 여백 */
-    font-weight: bold; /* 굵은 글씨 */
-    color: #00ffcc; /* 강조된 텍스트 색상 (시원한 파란색) */
-}
-
-/* 방 생성 폼 스타일 */
+/* 🟢 방 생성 폼 */
 #createRoomForm {
-    background-color: #333; /* 어두운 배경색 */
-    padding: 20px; /* 내부 여백 */
-    border-radius: 5px; /* 둥근 모서리 */
-    color: white; /* 폰트 색상 */
-    width: 300px; /* 폼 너비 */
-    margin-top: 20px; /* 상단 여백 */
+    background: rgba(0, 0, 0, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: none;
 }
 
-/* 방 생성 폼 필드 및 버튼 사이의 간격 */
-#createRoomForm input, #createRoomForm button {
-    margin-bottom: 10px; /* 각 입력 요소와 버튼 사이 여백 */
+#createRoomForm h3 {
+    color: #FFD700;
+    margin-bottom: 15px;
 }
 
-/* 방 생성 폼 버튼 스타일 */
-#createRoomForm button {
-    background-color: #4CAF50; /* 버튼 배경색 */
-    color: white; /* 버튼 텍스트 색상 */
-    padding: 10px 20px; /* 버튼 내부 여백 */
-    border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 둥근 모서리 */
-    cursor: pointer; /* 손가락 모양 커서 */
-    font-size: 16px; /* 버튼 텍스트 크기 */
-    transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
+input[type="text"], input[type="password"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 90%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    margin-top: 10px;
 }
 
-/* 버튼에 마우스 올릴 때 색상 변화 */
-#createRoomForm button:hover {
-    background-color: #45a049; /* 버튼 배경색 어두운 녹색으로 변경 */
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+button {
+    background: #FFD700;
+    color: black;
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 🟢 새로운 그리드 컨테이너 */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 방 목록과 채팅을 가로로 배치 */
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+/* 🟢 방 목록 및 채팅 카드 스타일 */
+.grid-item {
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* 🟢 방 목록 */
+#roomList {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.room-item {
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+/* 입장 불가능한 방 버튼 스타일 */
+button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* 🟢 채팅 */
+#chatMessages {
+    max-height: 200px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 10px;
+    text-align: left;
+    color: #FFD700;
+}
+
+/* 🟢 반응형 디자인 */
+@media (max-width: 600px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* 모바일에서는 세로로 정렬 */
+    }
+
+    input[type="text"], input[type="password"], button {
+        width: 100%;
+    }
 }

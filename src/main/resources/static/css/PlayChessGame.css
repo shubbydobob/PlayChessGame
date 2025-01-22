@@ -1,39 +1,104 @@
-/* 헤더 스타일 */
-#header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: #444;
-    border-bottom: 2px solid #4CAF50;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+/* 🟢 공통 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-#header div {
+/* 🟢 배경 설정 */
+body {
+    background: url('/images/chess-home.jpg') no-repeat center center/cover;
+    height: 100vh;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+/* 🟢 헤더 스타일 */
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFD700; /* 골드 색상 */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* 🟢 사용자 정보 영역 */
+#user-section {
+    background: rgba(0, 0, 0, 0.75);
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* 🟢 로그인 폼 */
+.auth-container {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 15px;
 }
 
-#header p {
-    margin: 0;
-    font-size: 18px;
-    color: #f5f5f5;
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
 }
 
-/* 방 만들기 링크 스타일 */
-a[href*="Room"] {
-    display: inline-block;
-    margin: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
+.login-form label {
+    font-size: 14px;
+    color: #ddd;
+    text-align: left;
+    display: block;
+}
+
+.login-form input {
+    padding: 10px;
     border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    border: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
 }
 
-a[href*="Room"]:hover {
-    background-color: #45a049;
+/* 🟢 버튼 스타일 */
+.btn {
+   display: inline-block;
+       background: #FFD700; /* 골드 */
+       color: black;
+       padding: 12px 18px;
+       border-radius: 5px;
+       font-size: 16px;
+       font-weight: bold;
+       text-decoration: none;
+       transition: 0.3s;
+       border: none;
+       cursor: pointer;
+       width: 100%; /* 🔹 버튼 크기를 동일하게 설정 */
+       text-align: center;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 🟢 중앙 컨테이너 */
+.center-container {
+    margin-top: 10px;
 }
