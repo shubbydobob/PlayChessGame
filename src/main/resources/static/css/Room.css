@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Arial", sans-serif;
 }
 
 /* 🟢 배경 설정 */
@@ -16,30 +16,94 @@ body {
     justify-content: center;
     text-align: center;
     color: white;
+    padding: 20px;
 }
 
 /* 🟢 제목 스타일 */
 h1 {
-    font-size: 32px;
+    font-size: 36px;
     font-weight: bold;
-    color: #FFD700; /* 골드 색상 */
+    color: #FFD700;
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
     margin-bottom: 20px;
 }
 
+/* 🟢 메인 컨테이너 */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 90%;
+    max-width: 600px;
+}
+
 /* 🟢 방 생성 버튼 */
-button {
-    background: #FFD700; /* 골드 */
+#openRoomButton {
+    background: #FFD700;
     color: black;
-    padding: 12px 18px;
-    border-radius: 5px;
+    padding: 12px 20px;
+    border-radius: 30px;
     font-size: 16px;
     font-weight: bold;
     text-decoration: none;
     transition: 0.3s;
     border: none;
     cursor: pointer;
-    width: 250px;
+    width: 100%;
+}
+
+#openRoomButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 🟢 방 생성 폼 */
+#createRoomForm {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+#createRoomForm h3 {
+    color: #FFD700;
+    margin-bottom: 15px;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 90%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    margin-top: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+button {
+    background: #FFD700;
+    color: black;
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
 }
 
 button:hover {
@@ -47,49 +111,39 @@ button:hover {
     color: white;
 }
 
-/* 🟢 방 생성 컨테이너 */
-#createRoomForm {
-    background: rgba(0, 0, 0, 0.75);
-    padding: 25px;
-    border-radius: 10px;
-    width: 350px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    margin-top: 20px;
-    display: none; /* 기본적으로 숨김 */
-}
-
-/* 🟢 입력 필드 스타일 */
-input[type="text"], input[type="password"] {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+/* 🟢 새로운 그리드 컨테이너 */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 방 목록과 채팅을 가로로 배치 */
+    gap: 20px;
     width: 100%;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.9);
-    margin-top: 10px;
+    max-width: 800px;
+    margin-top: 20px;
 }
 
-/* 🟢 방 목록 스타일 */
-#roomList {
+/* 🟢 방 목록 및 채팅 카드 스타일 */
+.grid-item {
     background: rgba(0, 0, 0, 0.75);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 15px;
-    width: 350px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    margin-top: 20px;
-    overflow-y: auto;
-    max-height: 250px;
 }
-/* 개별 방 아이템 스타일 */
+
+/* 🟢 방 목록 */
+#roomList {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
 .room-item {
-    padding: 10px;
+    padding: 8px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 14px;
 }
 
 /* 입장 불가능한 방 버튼 스타일 */
@@ -97,39 +151,25 @@ button:disabled {
     background: gray;
     cursor: not-allowed;
 }
-/* 🟢 채팅 입력 필드 */
-#chatInput {
-    width: 250px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.9);
-    margin-top: 15px;
-}
 
-/* 🟢 채팅 메시지 출력 */
+/* 🟢 채팅 */
 #chatMessages {
-    width: 350px;
-    max-height: 250px;
+    max-height: 200px;
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.75);
-    border: 1px solid #FFD700;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     padding: 10px;
-    margin-top: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     text-align: left;
     color: #FFD700;
 }
 
 /* 🟢 반응형 디자인 */
 @media (max-width: 600px) {
-    input[type="text"], input[type="password"], button, #chatInput {
-        width: 100%;
+    .grid-container {
+        grid-template-columns: 1fr; /* 모바일에서는 세로로 정렬 */
     }
 
-    #chatMessages, #roomList {
-        width: 90%;
+    input[type="text"], input[type="password"], button {
+        width: 100%;
     }
 }

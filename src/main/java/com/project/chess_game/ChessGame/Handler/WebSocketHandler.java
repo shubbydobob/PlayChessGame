@@ -56,20 +56,32 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private void sendRoomListToClient(WebSocketSession session) throws Exception {
         Iterable<Room> rooms = roomRepository.findAll(); // 모든 방 목록 조회
         List<Map<String, Object>> roomList = new ArrayList<>();
+
         for (Room room : rooms) {
             Map<String, Object> roomData = new HashMap<>();
             roomData.put("roomId", room.getId());  // roomId 포함
             roomData.put("roomName", room.getRoomName()); // roomName 포함
+            roomData.put("currentPlayers", getPlayerCount(room));
+            roomData.put("maxPlayers", 2);
+
             roomList.add(roomData);  // 리스트에 추가
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("event", "roomListUpdate"); // 방 목록 업데이트 이벤트
-        response.put("rooms", rooms); // 방 목록 정보
+        response.put("rooms", roomList); // 방 목록 정보
+
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response))); // 클라이언트에게 방 목록 전송
-        logger.info("방 목록 전송: 방 개수 {}", ((Collection<?>) rooms).size());
+        logger.info("방 목록 전송: 방 개수 {}", roomList.size());
     }
 
+    // 현재 방에 입장한 플레이어 수 가져오기
+    private int getPlayerCount(Room room) {
+        int count = 0;
+        if (room.getPlayer1() != null) count++;
+        if (room.getPlayer2() != null) count++;
+        return count;
+    }
 
     // 플레이어 입장 이벤트를 클라이언트에 전송
     private void sendJoinRoomEvent(WebSocketSession session, Long roomId, String roomName, String playerName) throws Exception {

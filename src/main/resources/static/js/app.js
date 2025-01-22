@@ -24,7 +24,7 @@ socket.onmessage = (event) => {
         case "roomCreated":
             console.log("🆕 방 생성됨:", data.roomId, data.roomName);
             displayMessage(`새로운 방이 생성되었습니다. 방 ID: ${data.roomId}, 이름: ${data.roomName}`);
-            addRoomToBoard(data.roomId, data.roomName, data.currentPlayers, data.maxPlayers);
+            addRoomToBoard(data.roomId, data.roomName, 1, 2);
             break;
 
         case "roomListUpdate":
@@ -62,7 +62,7 @@ function updateRoomList(rooms) {
 
     rooms.forEach(room => {
         console.log("🔹 방 정보:", room);
-        addRoomToBoard(room.id, room.roomName);
+        addRoomToBoard(room.roomId, room.roomName, room.currentPlayers, room.maxPlayers);
     });
 }
 
