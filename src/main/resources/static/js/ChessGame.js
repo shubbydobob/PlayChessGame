@@ -81,6 +81,7 @@ function drawPieces() {
         }
     }
 }
+
 // 현재 플레이어의 기물인지 확인하는 함수
 function isCurrentPlayerPiece(row, col) {
     const piece = board[row][col];
@@ -89,81 +90,88 @@ function isCurrentPlayerPiece(row, col) {
            (currentTurn === 'black' && piece === piece.toLowerCase());
 }
 
-
 // 사용자가 마우스로 타일을 클릭할 때
 function mousePressed() {
-    const col = Math.floor(mouseX / tileSize); // 클릭한 타일의 열 계산
-    const row = Math.floor(mouseY / tileSize); // 클릭한 타일의 행 계산
+    const col = Math.floor(mouseX / tileSize);
+    const row = Math.floor(mouseY / tileSize);
 
     if (selectedPiece) {
-        // 이미 기물이 선택되어 있으면, 선택한 위치로 이동
-        if (isValidMove(selectedPiece.row, selectedPiece.col, row, col)) {
+        // 🔹 같은 위치를 다시 클릭하면 선택 취소 (기물이 사라지는 문제 해결)
+        if (selectedPiece.row === row && selectedPiece.col === col) {
+            console.log("🔄 선택 취소");
+            selectedPiece = null;
+            possibleMoves = [];
+        }
+        // 이동 가능한 위치인지 확인 후 이동
+        else if (possibleMoves.some(move => move.row === row && move.col === col)) {
             movePiece(selectedPiece.row, selectedPiece.col, row, col);
-            selectedPiece = null; // 이동 후 선택된 기물 초기화
+            selectedPiece = null;
+            possibleMoves = [];
         } else {
-            console.log("잘못된 이동입니다.");
-            selectedPiece = null; // 다른 위치 클릭시 선택 초기화
+            console.log("🚫 잘못된 이동");
+            selectedPiece = null;
+            possibleMoves = [];
         }
     } else {
-        // 기물 선택하기
-        if (board[row][col] !== '') {
-            const piece = board[row][col];
-            // 현재 턴에 맞는 플레이어의 기물만 선택 가능
-            if ((currentTurn === 'white' && piece === piece.toUpperCase()) ||
-                (currentTurn === 'black' && piece === piece.toLowerCase())) {
-                selectedPiece = { row, col }; // 기물 선택
-                console.log(`선택한 기물: ${piece} (행: ${row}, 열: ${col})`);
-            } else {
-                console.log(`${currentTurn === 'white' ? '플레이어1' : '플레이어2'}의 차례입니다.`);
-            }
+        // 기물 선택 (현재 턴의 기물만 선택 가능)
+        if (board[row][col] !== '' && isCurrentPlayerPiece(row, col)) {
+            selectedPiece = { row, col };
+            possibleMoves = calculateValidMoves(row, col); // 이동 가능한 위치 계산
+            console.log(`✅ 선택한 기물: ${board[row][col]} (행: ${row}, 열: ${col})`);
         } else {
-            console.log("빈 칸을 클릭했습니다.");
+            console.log("🚫 빈 칸을 클릭했습니다.");
         }
     }
+    drawBoard();
+}
+
+// 이동 가능한 위치를 `isValidMove`로 계산하여 `possibleMoves`에 저장
+function calculateValidMoves(row, col) {
+    let moves = [];
+    for (let r = 0; r < boardSize; r++) {
+        for (let c = 0; c < boardSize; c++) {
+            if (isValidMove(row, col, r, c)) {
+                moves.push({ row: r, col: c });
+            }
+        }
+    }
+    return moves;
 }
 
 // 유효한 이동인지 확인하는 함수
 function isValidMove(fromRow, fromCol, toRow, toCol) {
-    const piece = board[fromRow][fromCol]; // 선택된 기물
+    const piece = board[fromRow][fromCol];
     console.log(`isValidMove 호출: ${piece} (${fromRow}, ${fromCol}) -> (${toRow}, ${toCol})`);
 
-    if (piece === ''){
+    if (piece === '') {
         console.error("유효하지 않은 이동: 선택한 칸이 비어있습니다.");
         return false;
     }
-    // 플레이어1(흰색) 대문자, 플레이어2(검은색) 소문자 확인
+
     if ((currentTurn === 'white' && piece !== piece.toUpperCase()) ||
         (currentTurn === 'black' && piece !== piece.toLowerCase())) {
         console.error("현재 턴에 맞지 않는 기물을 선택했습니다.");
         return false;
     }
 
-    // 기물 종류를 소문자로 변환하여 이동 규칙 처리
     switch (piece.toLowerCase()) {
-        case 'k':
-            console.log("킹 이동 검사");
-            return isKingMove(fromRow, fromCol, toRow, toCol);
-        case 'q':
-            console.log("퀸 이동 검사");
-            return isQueenMove(fromRow, fromCol, toRow, toCol);
-        case 'r':
-            console.log("룩 이동 검사");
-            return isRookMove(fromRow, fromCol, toRow, toCol);
-        case 'b':
-            console.log("비숍 이동 검사");
-            return isBishopMove(fromRow, fromCol, toRow, toCol);
-        case 'n': // 나이트는 장애물 검사 없이 이동 가능
-            console.log("나이트 이동 검사");
-            return isKnightMove(fromRow, fromCol, toRow, toCol);
-        case 'p':
-            console.log("폰 이동 검사");
-            return isPawnMove(fromRow, fromCol, toRow, toCol);
-        default:
-            console.error(`유효하지 않은 기물: ${piece}`);
-            return false;
+        case 'k': return isKingMove(fromRow, fromCol, toRow, toCol);
+        case 'q': return isQueenMove(fromRow, fromCol, toRow, toCol);
+        case 'r': return isRookMove(fromRow, fromCol, toRow, toCol);
+        case 'b': return isBishopMove(fromRow, fromCol, toRow, toCol);
+        case 'n': return isKnightMove(fromRow, fromCol, toRow, toCol);
+        case 'p': return isPawnMove(fromRow, fromCol, toRow, toCol);
+        default: return false;
     }
 }
 
+// 기물 이동
+function movePiece(fromRow, fromCol, toRow, toCol) {
+    board[toRow][toCol] = board[fromRow][fromCol];
+    board[fromRow][fromCol] = '';
+    currentTurn = currentTurn === 'white' ? 'black' : 'white';
+    drawBoard();
+}
 // 장애물 확인 함수
 function checkPathClear(fromRow, fromCol, toRow, toCol) {
     const rowStep = Math.sign(toRow - fromRow); // 행 이동 방향
@@ -241,34 +249,6 @@ function isPawnMove(fromRow, fromCol, toRow, toCol) {
         return true;
     }
     return false;
-}
-
-// 체스 기물 이동 (예: 체스 기물 선택 후 이동)
-function movePiece(fromRow, fromCol, toRow, toCol) {
-    // 유효한 범위 내에서만 이동하도록 검사
-    if (fromRow < 0 || fromRow >= boardSize || fromCol < 0 || fromCol >= boardSize ||
-        toRow < 0 || toRow >= boardSize || toCol < 0 || toCol >= boardSize) {
-        console.error("잘못된 이동 범위입니다.");
-        return;
-    }
-
-    const piece = board[fromRow][fromCol];
-    if (piece === '') {
-        console.error("이동할 기물이 없습니다.");
-        return;
-    }
-
-    // 간단한 이동 예시: 빈 칸으로 이동 (복잡한 규칙은 추가 필요)
-    board[toRow][toCol] = piece;
-    board[fromRow][fromCol] = ''; // 기존 자리 비우기
-
-    console.log(`기물이 ${fromRow},${fromCol}에서 ${toRow},${toCol}로 이동했습니다.`);
-
-     // 턴 변경
-     currentTurn = (currentTurn === 'white') ? 'black' : 'white';  // 턴 전환
-
-     drawBoardAfterMove(); // 보드 업데이트
-     updateTurnDisplay(); // 현재 턴 표시
 }
 
 // 이동 후 보드 업데이트 및 리렌더링
