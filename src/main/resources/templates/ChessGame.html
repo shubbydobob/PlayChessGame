@@ -9,6 +9,7 @@
 <body>
 <div id="gameContainer">
     <h1>체스 게임</h1>
+
     <div id="chessBoard">
         <!-- 체스 보드가 렌더링될 곳 -->
     </div>
@@ -16,10 +17,17 @@
     <div id="gameInfo">
         <h3>게임 정보</h3>
         <p id="currentTurn">플레이어1</p> <!-- 현재 턴을 표시하는 곳 -->
-        <!-- roomId가 표시될 곳 -->
+
+        <!-- ⏳ 타이머 UI 추가 -->
+        <div id="timerContainer">
+            <p id="whiteTimer">White: 600s</p>
+            <p id="blackTimer">Black: 600s</p>
+        </div>
+
+        <!-- 방 ID 표시 -->
+        <p id="roomIdDisplay"></p>
     </div>
 </div>
-
 <script src="/js/ChessGame.js"></script> <!-- 체스 게임 로직을 담당하는 JS 파일 -->
 </body>
 </html>
