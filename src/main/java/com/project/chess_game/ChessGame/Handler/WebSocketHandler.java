@@ -18,8 +18,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     private RoomRepository roomRepository; // RoomRepository 의존성 주입
+
     private Map<Long, WebSocketSession> roomSessions = new HashMap<>(); // 생성된 방과 세션 연결
     private Map<Long, Integer> roomPlayerCount = new HashMap<>(); // 방에 플레이어 수 추적
 
@@ -123,6 +125,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     Long joinRoomId = Long.valueOf(data.get("roomId")); // roomId를 Long 타입으로 변환
                     String joinRoomName = data.get("roomName");
                     String playerName = data.get("playerName");
+
                     logger.info("방 입장 요청: 방 ID {}, 방 Name {}, 플레이어 이름: {}", joinRoomId, joinRoomName, playerName);
 
                     int playerCount = roomPlayerCount.getOrDefault(joinRoomId, 0); // 방에 입장한 플레이어 수를 가져옴, 기본값은 0

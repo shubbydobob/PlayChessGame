@@ -36,6 +36,16 @@ socket.onmessage = (event) => {
             console.log("🚶‍♂️ 플레이어 입장:", data.playerName, "방 ID:", data.roomId);
             displayMessage(`${data.playerName}님이 방 ${data.roomId}에 입장했습니다.`);
             updateRoomCapacity(data.roomId, data.currentPlayers, data.maxPlayers);
+
+            if (data.currentPlayers === data.maxPlayers) {
+                console.log("CheesGame으로 이동: roomId =", data.roomId);
+                window.location.href=`/ChessGame?roomId=${data.roomId}`;
+            }
+            break;
+
+        case "startGame":
+            console.log("🎯 게임 시작! ChessGame으로 이동: roomId =", data.roomId);
+            window.location.href = `/ChessGame?roomId=${data.roomId}`;
             break;
 
         case "roomFull":
@@ -43,7 +53,6 @@ socket.onmessage = (event) => {
             alert(`⚠️ 입장 불가: 방 ${data.roomId}(${data.roomName})는 최대 인원이 찼습니다.`);
             updateRoomCapacity(data.roomId, data.currentPlayers, data.maxPlayers);
             break;
-
 
         case "chatMessage":
             console.log("💬 채팅 메시지 수신:", data.message);
