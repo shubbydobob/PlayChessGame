@@ -1,6 +1,9 @@
 // 선택된 기물과 현재 턴 정보를 저장
 let selectedPiece = null; // 선택된 체스 기물 (행, 열 정보 포함)
 let currentTurn = 'white'; // 현재 턴 (white: 플레이어1, black: 플레이어2)
+let timers = { white: 600, black: 600 }; // 초 단위 (5분)
+let possibleMoves = []; // 이동 가능 위치를 저장할 배열 설정
+
 
 // p5.js 체스 보드 렌더링, 보드 크기 및 타일 크기 설정
 const tileSize = 100; // 각 타일 크기
@@ -25,10 +28,18 @@ let board = JSON.parse(JSON.stringify(initialBoard)); // 보드를 초기화
 function setup() {
     const canvas = createCanvas(tileSize * boardSize, tileSize * boardSize);
     canvas.parent('chessBoard'); // 체스 보드 HTML 요소에 캔버스를 붙임
-    drawChessBoard();
-    drawPieces();
+    drawBoard();
+    startTimer(); // ✅ 타이머 시작
     console.log("체스 보드 초기화 완료");
 }
+
+function drawBoard(){
+    clear();
+    drawChessBoard();
+    highlightPossibleMoves();
+    drawPieces();
+}
+
 
 // 체스 보드 그리기
 function drawChessBoard() {
@@ -43,6 +54,15 @@ function drawChessBoard() {
         isWhite = !isWhite; // 다음 행의 색상 변경
     }
 }
+
+// 이동 가능 경로 표시
+function highlightPossibleMoves() {
+    fill(0, 255, 0, 150);
+    for (let move of possibleMoves) {
+        ellipse(move.col * tileSize + tileSize / 2, move.row * tileSize + tileSize / 2, tileSize / 3);
+    }
+}
+
 
 // 체스 기물 그리기
 function drawPieces() {
@@ -61,6 +81,15 @@ function drawPieces() {
         }
     }
 }
+// 현재 플레이어의 기물인지 확인하는 함수
+function isCurrentPlayerPiece(row, col) {
+    const piece = board[row][col];
+    if (piece === '') return false;
+    return (currentTurn === 'white' && piece === piece.toUpperCase()) ||
+           (currentTurn === 'black' && piece === piece.toLowerCase());
+}
+
+
 // 사용자가 마우스로 타일을 클릭할 때
 function mousePressed() {
     const col = Math.floor(mouseX / tileSize); // 클릭한 타일의 열 계산
@@ -256,6 +285,45 @@ function updateTurnDisplay() {
         turnDisplay.textContent = currentTurn === 'white' ? "플레이어1" : "플레이어2";
     }
 }
+
+// 타이머 UI 업데이트 (오류 방지)
+function updateTimerDisplay() {
+    const whiteTimerEl = document.getElementById("whiteTimer");
+    const blackTimerEl = document.getElementById("blackTimer");
+
+    if (whiteTimerEl && blackTimerEl) {
+        whiteTimerEl.textContent = `White: ${timers.white}s`;
+        blackTimerEl.textContent = `Black: ${timers.black}s`;
+    } else {
+        console.warn("⚠️ 타이머 UI 요소를 찾을 수 없습니다. HTML 파일에 추가해야 합니다.");
+    }
+}
+
+// ✅ 타이머 실행 확인용 로그 추가
+function startTimer() {
+    console.log("🕰️ 타이머 시작!");
+
+    setInterval(() => {
+        if (timers[currentTurn] > 0) {
+            timers[currentTurn]--;
+
+            updateTimerDisplay();
+        } else {
+            console.log(`⏳ ${currentTurn} 시간 초과! 턴 변경`);
+            currentTurn = currentTurn === 'white' ? 'black' : 'white';
+            resetTimer();
+        }
+    }, 1000);
+}
+
+// ✅ `resetTimer()`에서 실행 확인
+function resetTimer() {
+    console.log(`🔄 ${currentTurn} 타이머 리셋`);
+    timers[currentTurn] = 600;
+    updateTimerDisplay();
+}
+
+
 
 // 게임 초기화
 function resetGame() {
