@@ -17,17 +17,20 @@ import java.util.*;
 public class WebSocketHandler extends TextWebSocketHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper(); // JSON 변환을 위한 ObjectMapper
+    private final RoomRepository roomRepository; // RoomRepository 의존성 주입
 
     @Autowired
-    private RoomRepository roomRepository; // RoomRepository 의존성 주입
-
-    private Map<Long, WebSocketSession> roomSessions = new HashMap<>(); // 생성된 방과 세션 연결
-    private Map<Long, Integer> roomPlayerCount = new HashMap<>(); // 방에 플레이어 수 추적
-
     public WebSocketHandler(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
+    private Set<WebSocketSession> globalChatSessions = Collections.synchronizedSet(new HashSet<>()); // 전역 채팅용 세션
+    // 방과 연결된 WebSocket
+    private Map<Long, WebSocketSession> roomSessions = new HashMap<>();
+
+    // 방에 플레이어 수 추적
+    private Map<Long, Integer> roomPlayerCount = new HashMap<>();
+
 
     // 방 생성 메소드
     private Long createRoom(String roomName, String password) {
@@ -72,9 +75,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Map<String, Object> response = new HashMap<>();
         response.put("event", "roomListUpdate"); // 방 목록 업데이트 이벤트
         response.put("rooms", roomList); // 방 목록 정보
-
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response))); // 클라이언트에게 방 목록 전송
-        logger.info("방 목록 전송: 방 개수 {}", roomList.size());
     }
 
     // 현재 방에 입장한 플레이어 수 가져오기
@@ -100,23 +101,19 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        logger.info("받은 메시지 페이로드: {}", payload);
 
         try {
             // 메시지 페이로드를 Map으로 변환
             Map<String, String> data = objectMapper.readValue(payload, HashMap.class);
             String event = data.get("event");
-            logger.info("이벤트 수신: {}", event);
 
             switch (event) {
                 case "createRoom":
-                    logger.info("방 생성 요청이 들어왔습니다.");
                     String roomName = data.get("roomName");
                     String password = data.get("password"); // 비밀번호는 선택 사항
                     Long roomId = createRoom(roomName, password);
                     roomSessions.put(roomId, session); // 방 ID와 연결된 세션을 관리
                     roomPlayerCount.put(roomId, 1); // 첫 번째 플레이어 입장
-                    logger.info("새 방 생성됨. 방 ID: {}, 방 이름: {}", roomId, roomName);
                     sendRoomCreatedEvent(session, roomId, roomName); // 클라이언트에게 방 생성 이벤트 전송
                     break;
 
@@ -161,10 +158,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         }
                         break;
                     }
-                case "chat":
+                case "globalChat":
                     String chatMessage = data.get("message"); // 채팅 메시지 추출
                     logger.info("채팅 메시지 수신: {}", chatMessage);
-                    sendChatMessageToRoom(session, chatMessage); // 방에 채팅 메시지 전송
+                    broadcastGlobalMessage(chatMessage); // 방에 채팅 메시지 전송
                     break;
 
                 case "getRoomList":
@@ -194,24 +191,27 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     // WebSocket 연결이 성공적으로 이루어졌을 때 호출
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        super.afterConnectionEstablished(session);
-
-        // 세션 ID를 로그로 기록하거나 세션 관련 정보를 처리할 수 있습니다.
-        String sessionId = session.getId();
-        logger.info("새로운 WebSocket 연결: 세션 ID = {}", sessionId); // 로그로 기록
-
-        // 방 목록 요청을 처리할 수 있도록 클라이언트에게 방 목록 전송
-        sendRoomListToClient(session);
+    public void afterConnectionEstablished(WebSocketSession session) {
+        globalChatSessions.add(session);
+        logger.info("새로운 사용자가 전역 채팅에 연결됨. 현재 접속자 수: {}", globalChatSessions.size());
     }
 
     // WebSocket 연결 종료 시 처리
     @Override
-    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws
-            Exception {
-        super.afterConnectionClosed(session, status);
-        String sessionId = session.getId();
-        logger.info("WebSocket 연결 종료: 세션 ID = {}", sessionId); // 로그로 기록
+    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
+        globalChatSessions.remove(session);
+        logger.info("사용자가 전역 채팅에서 나감. 현재 접속자 수: {}", globalChatSessions.size());
+    }
+
+    // 모든 클라이언트에게 메시지 전송
+    private void broadcastGlobalMessage(String message) throws Exception {
+        for (WebSocketSession session : globalChatSessions) {
+            if (session.isOpen()) {
+                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(Map.of(
+                        "event", "globalChatMessage",
+                        "message", message
+                ))));
+            }
+        }
     }
 }

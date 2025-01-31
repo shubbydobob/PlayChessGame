@@ -57,12 +57,12 @@ public class ChessGameController {
     @GetMapping("/Register")
     private String RegisterPage() {
         logger.info("회원가입 페이지 요청: 회원가입 해주세요!");
-        return "/Login/Register";
+        return "Login/Register";
     }
 
     // 계정 생성 요청 처리
     @PostMapping("/Register")
-    public String registerUser(@RequestParam String userId, @RequestParam String password, Model model) {
+    public String registerUser(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session) {
         logger.info("계정 생성 요청: userId = {}", userId);
 
         User user = new User();
@@ -72,11 +72,12 @@ public class ChessGameController {
         boolean isCreated = userService.registerUser(user);
         if (isCreated) {
             logger.info("계정 생성 성공: userId = {}", userId);
-            return "redirect:/Register?success=true";
+            session.setAttribute("loggedInUser", userId); // 회원가입 후 로그인 처리
+            return "redirect:/";
         } else {
             logger.warn("계정 생성 실패: userId = {}", userId);
             model.addAttribute("error", "이미 존재하는 사용자 ID입니다.");
-            return "/Login/Register"; // 계정 생성 페이지로 다시 이동
+            return "Login/Register"; // 계정 생성 페이지로 다시 이동
         }
     }
 

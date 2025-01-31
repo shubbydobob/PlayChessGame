@@ -28,7 +28,7 @@ public class UserService {
         //이미 생성한 UserId 있는지 확인
         Optional<User> existingUser = userRepository.findByUserId(user.getUserId());
         if (existingUser.isPresent()) {
-            logger.warn("계정 생성 실패 : 이미 존자하는 유저 ID = {}", user.getUserId());
+            logger.warn("계정 생성 실패 : 이미 존재하는 유저 ID = {}", user.getUserId());
             return false; //이미 존재
         }
         userRepository.save(user);
